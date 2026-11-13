@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Fesstival · Hesap</title>
+<style>
+  :root {
+    --zemin: #FBFBFA; --kart: #FFFFFF; --halka: #ECECE9; --cizgi: #E5E5EA; --girdi: #D2D2D7;
+    --metin: #1D1D1F; --metin2: #3A3A3C; --ikincil: #6E6E73; --mavi: #0A66C2; --yesil: #15803D;
+    --yesilZemin: #E5F1EA; --kirmizi: #D70015; --kirmiziZemin: #FDECEA; --marka: #E5341B;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--zemin); color: var(--metin);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", Inter, "Segoe UI", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased; }
+  body { min-height: 100vh; }
+  .ust { height: 52px; display: flex; align-items: center; gap: 8px; padding: 0 16px;
+    background: rgba(255,255,255,0.92); border-bottom: 1px solid var(--cizgi); }
+  .logo { width: 24px; height: 24px; border-radius: 6px; background: var(--marka); display: flex; align-items: center; justify-content: center; }
+  .ust b { font-size: 15px; letter-spacing: .02em; }
+  main { max-width: 440px; margin: 0 auto; padding: 32px 16px 40px; display: flex; flex-direction: column; gap: 16px; }
+  .kart { background: var(--kart); border-radius: 14px; box-shadow: 0 0 0 1px var(--halka); padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+  .sonuc { align-items: center; text-align: center; padding: 28px 20px; }
+  .ik { width: 64px; height: 64px; border-radius: 32px; display: flex; align-items: center; justify-content: center; }
+  h1 { margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -.01em; }
+  p { margin: 0; font-size: 15px; line-height: 1.5; color: var(--ikincil); }
+  label { display: flex; flex-direction: column; gap: 6px; }
+  label span { font-size: 13px; font-weight: 600; color: var(--metin2); }
+  input { width: 100%; height: 44px; padding: 0 12px; border: 1px solid var(--girdi); border-radius: 10px;
+    font: inherit; font-size: 17px; color: var(--metin); background: #fff; outline: none; }
+  input:focus { border-color: var(--mavi); box-shadow: 0 0 0 3px rgba(10,102,194,.15); }
+  button { height: 50px; border: 0; border-radius: 12px; background: var(--mavi); color: #fff; font: inherit;
+    font-size: 17px; font-weight: 600; cursor: pointer; }
+  button:disabled { opacity: .45; cursor: default; }
+  .hata { font-size: 13px; color: var(--kirmizi); min-height: 1em; }
+  .dip { font-size: 12px; color: var(--ikincil); line-height: 1.45; text-align: center; }
+</style>
+</head>
+<body>
+<header class="ust">
+  <span class="logo"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg></span>
+  <b>FESSTIVAL</b>
+</header>
+<main id="sayfa"></main>
+
+<script>
+  // Supabase e-posta bağlantılarının açıldığı sayfa: e-posta doğrulama ve parola yenileme.
+  const SUPABASE = "https://igisxxlsixjeplirxtsp.supabase.co";
+  const ANAHTAR = "sb_publishable_9-t40KkzUznQNXw0RWRU8g_3_lvnhE3";
+  const sayfa = document.getElementById("sayfa");
+
+  const p = new URLSearchParams(location.hash.replace(/^#/, ""));
+  const q = new URLSearchParams(location.search);
+  // Jetonun tarayıcı geçmişinde kalmaması için adres temizlenir
+  if (location.hash || location.search) history.replaceState(null, "", location.pathname);
+
+  const tur = p.get("type") || q.get("type") || "";
+  const jeton = p.get("access_token");
+  const hata = p.get("error_description") || q.get("error_description") || p.get("error") || q.get("error");
+
+  const ikon = (renk, zemin, yol) =>
+    `<div class="ik" style="background:${zemin}"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="${renk}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${yol}</svg></div>`;
+  const tamam = ikon("var(--yesil)", "var(--yesilZemin)", '<path d="m5 12 5 5 9-10"/>');
+  const uyari = ikon("var(--kirmizi)", "var(--kirmiziZemin)", '<path d="M12 8v5M12 16.5v.5"/><circle cx="12" cy="12" r="9"/>');
+
+  function sonuc(ik, baslik, metin) {
+    sayfa.innerHTML = `<section class="kart sonuc">${ik}<h1>${baslik}</h1><p>${metin}</p></section>
+      <p class="dip">Bu sayfayı kapatabilirsiniz.</p>`;
+  }
+
+  function hataMetni(h) {
+    const k = (h || "").toLowerCase();
+    if (k.includes("expired") || k.includes("invalid")) return "Bağlantının süresi dolmuş ya da daha önce kullanılmış. Fesstival uygulamasından yeni bir bağlantı isteyin.";
+    return "Bağlantı açılamadı. Fesstival uygulamasından yeni bir bağlantı isteyin.";
+  }
+
+  function parolaFormu() {
+    sayfa.innerHTML = `<section class="kart">
+      <h1>Yeni Parola</h1>
+      <p>Fesstival hesabınız için yeni bir parola belirleyin.</p>
+      <label><span>Yeni Parola</span><input id="p1" type="password" autocomplete="new-password" minlength="8"></label>
+      <label><span>Yeni Parola (Tekrar)</span><input id="p2" type="password" autocomplete="new-password" minlength="8"></label>
+      <div class="hata" id="h"></div>
+      <button id="kaydet" type="button">Parolayı Kaydet</button>
+    </section><p class="dip">En az 8 karakter.</p>`;
+    const b = document.getElementById("kaydet"), h = document.getElementById("h");
+    b.onclick = async () => {
+      const a = document.getElementById("p1").value, c = document.getElementById("p2").value;
+      h.textContent = "";
+      if (a.length < 8) { h.textContent = "Parola en az 8 karakter olmalı."; return; }
+      if (a !== c) { h.textContent = "Parolalar aynı değil."; return; }
+      b.disabled = true; b.textContent = "Kaydediliyor…";
+      try {
+        const r = await fetch(`${SUPABASE}/auth/v1/user`, {
+          method: "PUT",
+          headers: { "apikey": ANAHTAR, "Authorization": `Bearer ${jeton}`, "Content-Type": "application/json" },
+          body: JSON.stringify({ password: a })
+        });
+        if (!r.ok) {
+          const j = await r.json().catch(() => ({}));
+          const m = (j.msg || j.message || j.error_description || "").toLowerCase();
+          if (m.includes("different from the old")) throw new Error("Yeni parola eskisinden farklı olmalı.");
+          if (m.includes("weak") || m.includes("at least")) throw new Error("Parola çok zayıf. Daha uzun bir parola seçin.");
+          if (r.status === 401 || r.status === 403) throw new Error(hataMetni("expired"));
+          throw new Error("Parola kaydedilemedi. Biraz sonra tekrar deneyin.");
+        }
+        sonuc(tamam, "Parolanız değişti", "Fesstival uygulamasına dönüp yeni parolanızla giriş yapın.");
+      } catch (e) {
+        h.textContent = e.message; b.disabled = false; b.textContent = "Parolayı Kaydet";
+      }
+    };
+  }
+
+  if (hata) {
+    sonuc(uyari, "Bağlantı geçersiz", hataMetni(hata));
+  } else if (tur === "recovery" && jeton) {
+    parolaFormu();
+  } else if (tur === "signup" || tur === "invite" || tur === "magiclink" || tur === "email") {
+    sonuc(tamam, "E-postanız doğrulandı", "Fesstival uygulamasına dönüp e-posta adresiniz ve parolanızla giriş yapın. Davet edildiyseniz ekibe kendiliğinden katılırsınız.");
+  } else if (tur === "email_change") {
+    sonuc(tamam, "E-posta adresiniz değişti", "Fesstival’de artık yeni adresinizle giriş yapabilirsiniz.");
+  } else {
+    sonuc(tamam, "Fesstival", "Bu sayfa Fesstival e-postalarındaki bağlantılar için kullanılır.");
+  }
+</script>
+</body>
+</html>
