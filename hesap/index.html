@@ -77,14 +77,14 @@
     return "Bağlantı açılamadı. Fesstival uygulamasından yeni bir bağlantı isteyin.";
   }
 
-  function parolaFormu() {
+  function parolaFormu(davet) {
     sayfa.innerHTML = `<section class="kart">
-      <h1>Yeni Parola</h1>
-      <p>Fesstival hesabınız için yeni bir parola belirleyin.</p>
+      <h1>${davet ? "Fesstival’e hoş geldiniz" : "Yeni Parola"}</h1>
+      <p>${davet ? "Ekibinize katılmak için Fesstival parolanızı belirleyin." : "Fesstival hesabınız için yeni bir parola belirleyin."}</p>
       <label><span>Yeni Parola</span><input id="p1" type="password" autocomplete="new-password" minlength="8"></label>
       <label><span>Yeni Parola (Tekrar)</span><input id="p2" type="password" autocomplete="new-password" minlength="8"></label>
       <div class="hata" id="h"></div>
-      <button id="kaydet" type="button">Parolayı Kaydet</button>
+      <button id="kaydet" type="button">${davet ? "Parolamı Belirle" : "Parolayı Kaydet"}</button>
     </section><p class="dip">En az 8 karakter.</p>`;
     const b = document.getElementById("kaydet"), h = document.getElementById("h");
     b.onclick = async () => {
@@ -107,9 +107,10 @@
           if (r.status === 401 || r.status === 403) throw new Error(hataMetni("expired"));
           throw new Error("Parola kaydedilemedi. Biraz sonra tekrar deneyin.");
         }
-        sonuc(tamam, "Parolanız değişti", "Fesstival uygulamasına dönüp yeni parolanızla giriş yapın.");
+        if (davet) sonuc(tamam, "Hesabınız hazır", "Fesstival uygulamasını açıp e-posta adresiniz ve bu parolayla giriş yapın. Ekibe kendiliğinden katılırsınız.");
+        else sonuc(tamam, "Parolanız değişti", "Fesstival uygulamasına dönüp yeni parolanızla giriş yapın.");
       } catch (e) {
-        h.textContent = e.message; b.disabled = false; b.textContent = "Parolayı Kaydet";
+        h.textContent = e.message; b.disabled = false; b.textContent = davet ? "Parolamı Belirle" : "Parolayı Kaydet";
       }
     };
   }
@@ -117,8 +118,10 @@
   if (hata) {
     sonuc(uyari, "Bağlantı geçersiz", hataMetni(hata));
   } else if (tur === "recovery" && jeton) {
-    parolaFormu();
-  } else if (tur === "signup" || tur === "invite" || tur === "magiclink" || tur === "email") {
+    parolaFormu(false);
+  } else if (tur === "invite" && jeton) {
+    parolaFormu(true);
+  } else if (tur === "signup" || tur === "magiclink" || tur === "email") {
     sonuc(tamam, "E-postanız doğrulandı", "Fesstival uygulamasına dönüp e-posta adresiniz ve parolanızla giriş yapın. Davet edildiyseniz ekibe kendiliğinden katılırsınız.");
   } else if (tur === "email_change") {
     sonuc(tamam, "E-posta adresiniz değişti", "Fesstival’de artık yeni adresinizle giriş yapabilirsiniz.");
