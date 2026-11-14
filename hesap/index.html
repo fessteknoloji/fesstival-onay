@@ -5,44 +5,65 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#13294A">
 <title>Fesstival · Hesap</title>
 <style>
+  /* Tasarım: A · Lacivert Şerit */
   :root {
-    --zemin: #FBFBFA; --kart: #FFFFFF; --halka: #ECECE9; --cizgi: #E5E5EA; --girdi: #D2D2D7;
-    --metin: #1D1D1F; --metin2: #3A3A3C; --ikincil: #6E6E73; --mavi: #0A66C2; --yesil: #15803D;
-    --yesilZemin: #E5F1EA; --kirmizi: #D70015; --kirmiziZemin: #FDECEA; --marka: #E5341B;
+    --lac: #0F2340; --zemin: #F5F7FA; --kart: #FFFFFF; --girdi: #D9DEE6; --cizgi: #E5E8EE;
+    --metin: #1D2433; --metin2: #3A4558; --ikincil: #6B7686; --mavi: #1F6FD1;
+    --yesil: #15803D; --yesilZemin: #E5F1EA; --kirmizi: #D70015; --kirmiziZemin: #FDECEA;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; background: var(--zemin); color: var(--metin);
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", Inter, "Segoe UI", system-ui, sans-serif;
     -webkit-font-smoothing: antialiased; }
   body { min-height: 100vh; }
-  .ust { height: 52px; display: flex; align-items: center; gap: 8px; padding: 0 16px;
-    background: rgba(255,255,255,0.92); border-bottom: 1px solid var(--cizgi); }
-  .logo { width: 24px; height: 24px; border-radius: 6px; background: var(--marka); display: flex; align-items: center; justify-content: center; }
-  .ust b { font-size: 15px; letter-spacing: .02em; }
-  main { max-width: 440px; margin: 0 auto; padding: 32px 16px 40px; display: flex; flex-direction: column; gap: 16px; }
-  .kart { background: var(--kart); border-radius: 14px; box-shadow: 0 0 0 1px var(--halka); padding: 20px; display: flex; flex-direction: column; gap: 14px; }
-  .sonuc { align-items: center; text-align: center; padding: 28px 20px; }
-  .ik { width: 64px; height: 64px; border-radius: 32px; display: flex; align-items: center; justify-content: center; }
-  h1 { margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -.01em; }
-  p { margin: 0; font-size: 15px; line-height: 1.5; color: var(--ikincil); }
+  .serit { position: relative; overflow: hidden; height: 230px;
+    background: linear-gradient(160deg, #13294A 0%, var(--lac) 60%, #0A1A31 100%); }
+  .serit .v { position: absolute; left: 52%; top: -260px; width: 1100px; height: 1100px; fill: #fff; opacity: .06; }
+  .serit .ic { position: relative; max-width: 1120px; margin: 0 auto; padding: 22px 20px; display: flex; align-items: center; gap: 10px; }
+  main { position: relative; margin-top: -130px; padding: 0 14px 48px; }
+  .kutu { max-width: 440px; margin: 0 auto; }
+  .kart { background: var(--kart); border-radius: 20px; box-shadow: 0 14px 40px rgba(15,35,64,.16); padding: 26px 22px; display: flex; flex-direction: column; gap: 14px; }
+  h1 { margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -.025em; }
+  p { margin: 0; font-size: 14px; line-height: 1.55; color: var(--ikincil); }
   label { display: flex; flex-direction: column; gap: 6px; }
-  label span { font-size: 13px; font-weight: 600; color: var(--metin2); }
-  input { width: 100%; height: 44px; padding: 0 12px; border: 1px solid var(--girdi); border-radius: 10px;
-    font: inherit; font-size: 17px; color: var(--metin); background: #fff; outline: none; }
-  input:focus { border-color: var(--mavi); box-shadow: 0 0 0 3px rgba(10,102,194,.15); }
-  button { height: 50px; border: 0; border-radius: 12px; background: var(--mavi); color: #fff; font: inherit;
-    font-size: 17px; font-weight: 600; cursor: pointer; }
+  label span { font-size: 12.5px; font-weight: 600; color: var(--metin2); }
+  input { width: 100%; height: 48px; padding: 0 14px; border: 1px solid var(--girdi); border-radius: 12px;
+    font: inherit; font-size: 16px; color: var(--metin); background: #fff; outline: none; }
+  input::placeholder { color: #9AA3B2; }
+  input:focus { border-color: var(--mavi); box-shadow: 0 0 0 4px rgba(31,111,209,.14); }
+  .guc { display: flex; gap: 6px; }
+  .guc i { flex: 1; height: 4px; border-radius: 2px; background: var(--cizgi); }
+  .guc-y { font-size: 12px; margin-top: -8px; min-height: 14px; }
+  button { height: 52px; border: 0; border-radius: 26px; background: var(--lac); color: #fff; font: inherit;
+    font-size: 16px; font-weight: 650; cursor: pointer; }
   button:disabled { opacity: .45; cursor: default; }
-  .hata { font-size: 13px; color: var(--kirmizi); min-height: 1em; }
-  .dip { font-size: 12px; color: var(--ikincil); line-height: 1.45; text-align: center; }
+  .hata { font-size: 13px; color: var(--kirmizi); }
+  .hata:empty { display: none; }
+  .dip { font-size: 13px; color: var(--ikincil); line-height: 1.5; text-align: center; margin-top: 18px; }
+  .sonuc { max-width: 520px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; padding-top: 40px; }
+  .sonuc .yuv { width: 92px; height: 92px; border-radius: 46px; background: #fff; box-shadow: 0 14px 40px rgba(15,35,64,.18);
+    display: flex; align-items: center; justify-content: center; margin-bottom: 8px; }
+  .sonuc h1 { font-size: 26px; }
+  .sonuc p { font-size: 14.5px; }
+  .sonuc .dip { margin-top: 6px; font-size: 12.5px; }
+  @media (min-width: 960px) {
+    .serit { height: 300px; }
+    .serit .ic { padding: 26px 32px; }
+    main { margin-top: -170px; }
+    .kart { padding: 30px 32px; }
+    h1 { font-size: 26px; }
+    .sonuc { padding-top: 70px; }
+    .sonuc h1 { font-size: 30px; }
+  }
 </style>
 </head>
 <body>
-<header class="ust">
-  <span class="logo"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg></span>
-  <b>FESSTIVAL</b>
+<header class="serit">
+  <svg class="v" viewBox="0 0 1000 1000" aria-hidden="true"><polygon points="322.5,865.5 518.9,865.5 774.0,120.0 591.3,120.0 424.4,668.1"/><polygon points="322.5,865.5 424.4,668.1 342.4,399.3 182.2,453.9"/></svg>
+  <div class="ic"><svg viewBox="0.0 0.0 100.0 100.0" width="32" height="32" aria-hidden="true" style="display:block; flex:none; width:32px; height:32px"><rect width="100" height="100" rx="22.4" fill="#E5341B"/><g transform="translate(18.817 23.392) scale(0.07606)"><path d="M250 710 L437 710 L680 0 H506 L347 522 Z" fill="#FFFFFF"/><path d="M250 710 L347 522 L269.0 266.0 L116.4 318.0 Z" fill="#FFE1DA"/></g></svg><svg viewBox="50.0 -240.0 4979.0 1003.0" width="89.4" height="18" role="img" aria-label="FESSTİVAL" style="display: block; flex: none"><path transform="translate(0 0)" d="M217 710V435H513V299H217V137H550V0H50V710Z" fill="#FFFFFF"/><path transform="translate(576 0)" d="M582 710V573H216V415H537V282H216V137H574V0H50V710Z" fill="#FFFFFF"/><path transform="translate(1173 0)" d="M336 723C505 723 627 638 627 500V492C627 369 534 308 371 281C236 259 216 236 216 195V192C216 150 250 118 322 118C396 118 441 150 448 217H615C603 68 491 -13 325 -13C165 -13 49 69 49 199V206C49 323 122 387 293 418C427 442 459 463 459 511V515C459 563 415 591 340 591C256 591 202 553 192 478H25C35 631 148 723 336 723Z" fill="#FFFFFF"/><path transform="translate(1814 0)" d="M336 723C505 723 627 638 627 500V492C627 369 534 308 371 281C236 259 216 236 216 195V192C216 150 250 118 322 118C396 118 441 150 448 217H615C603 68 491 -13 325 -13C165 -13 49 69 49 199V206C49 323 122 387 293 418C427 442 459 463 459 511V515C459 563 415 591 340 591C256 591 202 553 192 478H25C35 631 148 723 336 723Z" fill="#FFFFFF"/><path transform="translate(2434 0)" d="M387 710V137H582V0H22V137H218V710Z" fill="#FFFFFF"/><path transform="translate(3039 0)" d="M225 710V0H55V710Z" fill="#FFFFFF"/><rect x="3096" y="-232" width="166" height="161" fill="#FFFFFF"/><g transform="translate(3224 0)"><g transform="translate(34 30)" opacity="0.22"><path d="M250 710 L437 710 L680 0 H506 L347 522 Z" fill="#FFFFFF"/><path d="M250 710 L347 522 L269.0 266.0 L116.4 318.0 Z" fill="#FFFFFF"/></g><path d="M250 710 L437 710 L680 0 H506 L347 522 Z" fill="#E5341B"/><path d="M250 710 L347 522 L269.0 266.0 L116.4 318.0 Z" fill="#EE7F68"/></g><path transform="translate(3805 0)" d="M726 710 459 0H275L8 710H179L228 569H500L549 710ZM364 175 455 437H274Z" fill="#FFFFFF"/><path transform="translate(4538 0)" d="M491 710V573H219V0H50V710Z" fill="#FFFFFF"/></svg></div>
 </header>
 <main id="sayfa"></main>
 
@@ -62,13 +83,20 @@
   const hata = p.get("error_description") || q.get("error_description") || p.get("error") || q.get("error");
 
   const ikon = (renk, zemin, yol) =>
-    `<div class="ik" style="background:${zemin}"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="${renk}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${yol}</svg></div>`;
+    `<span class="yuv"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="${renk}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${yol}</svg></span>`;
+  const kacis = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  // Bağlantıdaki jetondan e-posta ve ad (yalnızca gösterim için)
+  const kisi = (() => {
+    try {
+      const y = JSON.parse(decodeURIComponent(escape(atob((jeton || "").split(".")[1].replace(/-/g, "+").replace(/_/g, "/")))));
+      return { eposta: y.email || "", ad: (y.user_metadata && y.user_metadata.full_name) || "", sirket: (y.user_metadata && y.user_metadata.sirket) || "" };
+    } catch { return { eposta: "", ad: "", sirket: "" }; }
+  })();
   const tamam = ikon("var(--yesil)", "var(--yesilZemin)", '<path d="m5 12 5 5 9-10"/>');
   const uyari = ikon("var(--kirmizi)", "var(--kirmiziZemin)", '<path d="M12 8v5M12 16.5v.5"/><circle cx="12" cy="12" r="9"/>');
 
   function sonuc(ik, baslik, metin) {
-    sayfa.innerHTML = `<section class="kart sonuc">${ik}<h1>${baslik}</h1><p>${metin}</p></section>
-      <p class="dip">Bu sayfayı kapatabilirsiniz.</p>`;
+    sayfa.innerHTML = `<div class="sonuc">${ik}<h1>${baslik}</h1><p>${metin}</p><p class="dip">Bu sayfayı kapatabilirsiniz.</p></div>`;
   }
 
   function hataMetni(h) {
@@ -78,14 +106,26 @@
   }
 
   function parolaFormu(davet) {
-    sayfa.innerHTML = `<section class="kart">
-      <h1>${davet ? "Fesstival’e hoş geldiniz" : "Yeni Parola"}</h1>
-      <p>${davet ? "Ekibinize katılmak için Fesstival parolanızı belirleyin." : "Fesstival hesabınız için yeni bir parola belirleyin."}</p>
+    const kim = [kacis(kisi.ad), kacis(kisi.eposta)].filter(Boolean).join(" · ");
+    const sirket = kisi.sirket ? kacis(kisi.sirket) + " ekibine" : "Ekibinize";
+    sayfa.innerHTML = `<div class="kutu"><section class="kart">
+      <h1>${davet ? "Fesstival’e hoş geldiniz" : "Yeni parola belirleyin"}</h1>
+      <p>${kim ? kim + "<br>" : ""}${davet ? sirket + " katılmak için parolanızı belirleyin." : "Fesstival hesabınız için yeni bir parola belirleyin."}</p>
       <label><span>Yeni Parola</span><input id="p1" type="password" autocomplete="new-password" minlength="8"></label>
-      <label><span>Yeni Parola (Tekrar)</span><input id="p2" type="password" autocomplete="new-password" minlength="8"></label>
-      <div class="hata" id="h"></div>
+      <label><span>Yeni Parola (Tekrar)</span><input id="p2" type="password" autocomplete="new-password" minlength="8" placeholder="En az 8 karakter"></label>
+      <div class="guc" aria-hidden="true"><i></i><i></i><i></i><i></i></div><span class="guc-y" id="gy"></span>
+      <div class="hata" id="h" role="alert"></div>
       <button id="kaydet" type="button">${davet ? "Parolamı Belirle" : "Parolayı Kaydet"}</button>
-    </section><p class="dip">En az 8 karakter.</p>`;
+    </section><p class="dip">Sonra Fesstival uygulamasını açıp bu e-posta ve parolayla giriş yapın.</p></div>`;
+    const p1 = document.getElementById("p1"), gy = document.getElementById("gy");
+    p1.addEventListener("input", () => {
+      const v = p1.value;
+      const puan = !v ? 0 : Math.min(4, (v.length >= 8) + (v.length >= 12) + (/[A-ZÇĞİÖŞÜ]/.test(v) && /[a-zçğıöşü]/.test(v)) + (/\d/.test(v) || /[^\wçğıöşüÇĞİÖŞÜ]/.test(v)));
+      const renk = puan <= 1 ? "#D70015" : puan === 2 ? "#B25000" : "#15803D";
+      document.querySelectorAll(".guc i").forEach((x, i) => x.style.background = i < puan ? renk : "");
+      gy.textContent = !v ? "" : puan <= 1 ? "Zayıf parola" : puan === 2 ? "Orta parola" : "Güçlü parola";
+      gy.style.color = renk;
+    });
     const b = document.getElementById("kaydet"), h = document.getElementById("h");
     b.onclick = async () => {
       const a = document.getElementById("p1").value, c = document.getElementById("p2").value;
